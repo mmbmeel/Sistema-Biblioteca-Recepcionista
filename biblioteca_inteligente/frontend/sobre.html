@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <title>Sobre o Sistema – Biblioteca Gestão Inteligente</title>
+  <meta name="description" content="Conheça a Biblioteca Gestão Inteligente: tecnologias utilizadas, funcionalidades e como usar a plataforma."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    /* ===== SOBRE PAGE ===== */
+    .about-hero {
+      background: var(--gradient-primary);
+      border-radius: var(--radius-xl, 20px);
+      padding: var(--space-xl) var(--space-xl);
+      margin-bottom: var(--space-xl);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .about-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      right: 20%;
+      width: 200px;
+      height: 200px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .hero-icon {
+      font-size: 72px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.3));
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .hero-text { z-index: 1; }
+    .hero-title {
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hero-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+    .hero-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .hero-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ===== TECH STACK ===== */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    .tech-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      text-align: center;
+      transition: var(--transition-normal);
+      cursor: default;
+    }
+    .tech-card:hover {
+      border-color: var(--border-active);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .tech-emoji { font-size: 36px; margin-bottom: 10px; display: block; }
+    .tech-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .tech-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+    /* ===== FEATURES ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg);
+      transition: var(--transition-normal);
+    }
+    .feature-card:hover {
+      border-color: var(--color-primary);
+      background: rgba(209,0,108,0.03);
+    }
+    .feature-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .feature-icon { font-size: 24px; }
+    .feature-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .feature-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ===== HOW TO USE ===== */
+    .steps-list { display: flex; flex-direction: column; gap: var(--space-md); }
+    .step-item {
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--space-md) var(--space-lg);
+      transition: var(--transition-normal);
+    }
+    .step-item:hover {
+      border-color: var(--border-active);
+      box-shadow: var(--shadow-md);
+    }
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-content { flex: 1; }
+    .step-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ===== SECTION TITLES ===== */
+    .about-section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .about-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+      margin-left: 8px;
+    }
+
+    /* ===== ARCHITECTURE ===== */
+    .arch-diagram {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      overflow-x: auto;
+    }
+    .arch-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .arch-layer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .arch-layer.frontend { background: rgba(209,0,108,0.12); border: 1px solid rgba(209,0,108,0.3); color: var(--color-primary); }
+    .arch-layer.backend  { background: rgba(100,149,237,0.12); border: 1px solid rgba(100,149,237,0.3); color: #6495ed; }
+    .arch-layer.database { background: rgba(60,179,113,0.12); border: 1px solid rgba(60,179,113,0.3); color: #3cb371; }
+    .arch-arrow { text-align: center; font-size: 20px; color: var(--text-muted); }
+
+    /* ===== FOOTER INFO ===== */
+    .about-footer-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--space-lg) var(--space-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+    }
+    .about-footer-icon { font-size: 40px; flex-shrink: 0; }
+    .about-footer-text h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .about-footer-text p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    @media(max-width:640px) {
+      .about-hero { flex-direction: column; text-align: center; }
+      .hero-badges { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menu">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div class="logo-text"><span class="logo-title">Biblioteca</span><span class="logo-subtitle">Gestão Inteligente</span></div>
+    </a>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="nav-label">Início</span></a>
+      <a href="catalogo.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="nav-label">Catálogo de Livros</span></a>
+      <a href="cadastro-livros.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nav-label">Cadastro de Livros</span></a>
+      <a href="cadastro-usuarios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Cadastro de Usuários</span></a>
+      <a href="emprestimos.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><span class="nav-label">Empréstimos</span></a>
+      <a href="reservas.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label">Reservas</span></a>
+      <a href="perfil.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Perfil do Usuário</span></a>
+      <a href="relatorios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="nav-label">Relatórios</span></a>
+      <a href="sobre.html" class="nav-item active"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><span class="nav-label">Sobre o Sistema</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-page-title">Sobre o Sistema</span>
+        <div class="topbar-breadcrumb"><span>Início</span><span>›</span><span>Sobre</span></div>
+      </div>
+      <div class="topbar-right">
+        <div class="user-greeting">
+          <span class="greeting-text">Olá, <span class="greeting-name">Recepcionista</span></span>
+          <div class="user-avatar">MR</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- HERO -->
+      <div class="about-hero">
+        <div class="hero-icon">📚</div>
+        <div class="hero-text">
+          <div class="hero-title">Biblioteca Gestão Inteligente</div>
+          <div class="hero-subtitle">
+            Um sistema web completo para o gerenciamento de bibliotecas acadêmicas —
+            com controle de acervo, usuários, empréstimos, reservas e relatórios,
+            tudo em uma interface moderna e intuitiva.
+          </div>
+          <div class="hero-badges">
+            <span class="hero-badge">v1.0.0</span>
+            <span class="hero-badge">Trabalho Acadêmico</span>
+            <span class="hero-badge">Programação II</span>
+            <span class="hero-badge">Fullstack</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TECNOLOGIAS -->
+      <div class="about-section-title">🔧 Tecnologias Utilizadas</div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <span class="tech-emoji">🟩</span>
+          <div class="tech-name">Node.js</div>
+          <div class="tech-desc">Runtime JavaScript para o servidor — rápido, assíncrono e escalável.</div>
+        </div>
+        <div class="tech-card">
+          <span class="tech-emoji">⚡</span>
+          <div class="tech-name">Express.js</div>
+          <div class="tech-desc">Framework minimalista para criação da API REST que alimenta o frontend.</div>
+        </div>
+        <div class="tech-card">
+          <span class="tech-emoji">🐬</span>
+          <div class="tech-name">MySQL</div>
+          <div class="tech-desc">Banco de dados relacional que armazena livros, usuários, empréstimos e reservas.</div>
+        </div>
+        <div class="tech-card">
+          <span class="tech-emoji">🌐</span>
+          <div class="tech-name">HTML5</div>
+          <div class="tech-desc">Estrutura semântica de todas as páginas da aplicação, com formulários acessíveis.</div>
+        </div>
+        <div class="tech-card">
+          <span class="tech-emoji">🎨</span>
+          <div class="tech-name">CSS3 / Vanilla CSS</div>
+          <div class="tech-desc">Design system próprio com variáveis CSS, glassmorphism, gradientes e animações.</div>
+        </div>
+        <div class="tech-card">
+          <span class="tech-emoji">✨</span>
+          <div class="tech-name">JavaScript ES6+</div>
+          <div class="tech-desc">Toda a lógica de frontend — CRUD, máscaras, validações e comunicação com a API.</div>
+        </div>
+        <div class="tech-card">
+          <span class="tech-emoji">📦</span>
+          <div class="tech-name">LocalStorage API</div>
+          <div class="tech-desc">Fallback automático quando o servidor está offline, mantendo a usabilidade.</div>
+        </div>
+        <div class="tech-card">
+          <span class="tech-emoji">🔗</span>
+          <div class="tech-name">REST API</div>
+          <div class="tech-desc">Comunicação frontend ↔ backend via endpoints HTTP padronizados com JSON.</div>
+        </div>
+      </div>
+
+      <!-- ARQUITETURA -->
+      <div class="about-section-title">🏗️ Arquitetura do Sistema</div>
+      <div class="arch-diagram">
+        <div class="arch-layers">
+          <div class="arch-layer frontend">
+            🌐 &nbsp; <strong>Frontend</strong> &nbsp;—&nbsp; HTML + CSS + JavaScript Vanilla
+            <span style="margin-left:auto;font-size:11px;opacity:0.7">páginas estáticas servidas pelo Express</span>
+          </div>
+          <div class="arch-arrow">⬆ ⬇ &nbsp;<span style="font-size:12px">HTTP / REST JSON</span></div>
+          <div class="arch-layer backend">
+            ⚡ &nbsp; <strong>Backend</strong> &nbsp;—&nbsp; Node.js + Express.js
+            <span style="margin-left:auto;font-size:11px;opacity:0.7">API REST · porta 3000</span>
+          </div>
+          <div class="arch-arrow">⬆ ⬇ &nbsp;<span style="font-size:12px">mysql2 driver</span></div>
+          <div class="arch-layer database">
+            🐬 &nbsp; <strong>Banco de Dados</strong> &nbsp;—&nbsp; MySQL
+            <span style="margin-left:auto;font-size:11px;opacity:0.7">livros · usuários · empréstimos · reservas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FUNCIONALIDADES -->
+      <div class="about-section-title">⚙️ Funcionalidades do Sistema</div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">📊</span>
+            <div class="feature-title">Dashboard</div>
+          </div>
+          <div class="feature-desc">Visão geral em tempo real com KPIs de livros, usuários, empréstimos e reservas. Destaque dos livros mais recentes do acervo.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">📚</span>
+            <div class="feature-title">Catálogo de Livros</div>
+          </div>
+          <div class="feature-desc">Navegação pelo acervo com filtros por categoria, idioma e status. Visualização em cards com capa, sinopse e informações detalhadas.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">➕</span>
+            <div class="feature-title">Cadastro de Livros</div>
+          </div>
+          <div class="feature-desc">Cadastre, edite e exclua livros com suporte a upload de capa (base64), ISBN, sinopse, idioma, editora e controle de quantidade disponível.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">👤</span>
+            <div class="feature-title">Cadastro de Usuários</div>
+          </div>
+          <div class="feature-desc">Gerenciamento de leitores com máscara automática de CPF (###.###.###-##), validação dos dígitos verificadores e formatação de telefone celular.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">🔄</span>
+            <div class="feature-title">Empréstimos</div>
+          </div>
+          <div class="feature-desc">Registre, edite e gerencie empréstimos com seletor pesquisável de livros e leitores. Detecção automática de atrasos e devolução com um clique.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">🔖</span>
+            <div class="feature-title">Reservas</div>
+          </div>
+          <div class="feature-desc">Reserve livros para leitores. Ao concluir uma reserva, o sistema cria automaticamente o empréstimo correspondente — sem retrabalho.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">📊</span>
+            <div class="feature-title">Relatórios</div>
+          </div>
+          <div class="feature-desc">Gráficos de barras com distribuição de livros por categoria e idioma, usuários por tipo e status dos empréstimos. Dados atualizados em tempo real.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">📡</span>
+            <div class="feature-title">Modo Offline</div>
+          </div>
+          <div class="feature-desc">Fallback automático para LocalStorage quando o servidor não está disponível. O sistema continua funcional com dados de demonstração.</div>
+        </div>
+      </div>
+
+      <!-- COMO USAR -->
+      <div class="about-section-title">🚀 Como Usar a Plataforma</div>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <div class="step-title">Inicie o servidor backend</div>
+            <div class="step-desc">
+              Instale as dependências com <code style="background:var(--glass-bg);padding:2px 6px;border-radius:4px;font-family:monospace">npm install</code>
+              e inicie com <code style="background:var(--glass-bg);padding:2px 6px;border-radius:4px;font-family:monospace">npm start</code> ou
+              <code style="background:var(--glass-bg);padding:2px 6px;border-radius:4px;font-family:monospace">node server.js</code>.
+              O servidor ficará disponível em <strong>http://localhost:3000</strong>.
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <div class="step-title">Configure o banco de dados MySQL</div>
+            <div class="step-desc">
+              Crie o banco e execute o script de criação das tabelas disponível no repositório.
+              Configure as credenciais no arquivo <code style="background:var(--glass-bg);padding:2px 6px;border-radius:4px;font-family:monospace">.env</code>
+              (DB_HOST, DB_USER, DB_PASS, DB_NAME).
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <div class="step-title">Cadastre o acervo de livros</div>
+            <div class="step-desc">
+              Acesse <strong>Cadastro de Livros</strong> no menu lateral. Clique em "Novo Livro", preencha os dados e opcionalmente
+              faça upload da capa arrastando uma imagem para o campo indicado. Salve para adicionar ao acervo.
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <div class="step-title">Cadastre os leitores</div>
+            <div class="step-desc">
+              Em <strong>Cadastro de Usuários</strong>, registre os leitores com nome, e-mail, CPF e telefone.
+              O sistema valida automaticamente o CPF e aplica a máscara no telefone celular (<em>(##) # ####-####</em>).
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <div class="step-title">Registre empréstimos e reservas</div>
+            <div class="step-desc">
+              Use <strong>Empréstimos</strong> para registrar a saída de livros. Pesquise o livro e o leitor pelo nome no seletor.
+              Para reservas antecipadas, use a página <strong>Reservas</strong> — ao concluí-la, o empréstimo é criado automaticamente.
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <div class="step-title">Registre devoluções</div>
+            <div class="step-desc">
+              Na tabela de empréstimos, clique no botão <strong>"↩ Devolver"</strong> para registrar a devolução do livro.
+              A data de devolução real é preenchida automaticamente com a data atual.
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">7</div>
+          <div class="step-content">
+            <div class="step-title">Acompanhe pelos Relatórios</div>
+            <div class="step-desc">
+              Na página de <strong>Relatórios</strong>, visualize gráficos com o estado atual da biblioteca —
+              distribuição por categorias, idiomas, tipos de usuários e status dos empréstimos.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RODAPÉ -->
+      <div style="margin-top: var(--space-xl)">
+        <div class="about-footer-card">
+          <div class="about-footer-icon">🎓</div>
+          <div class="about-footer-text">
+            <h3>Trabalho Acadêmico — Programação II</h3>
+            <p>
+              Este sistema foi desenvolvido como projeto acadêmico, demonstrando a integração completa
+              de um backend RESTful em Node.js com Express e MySQL e um frontend responsivo desenvolvido
+              integralmente em HTML, CSS e JavaScript Vanilla, sem o uso de frameworks pesados.
+              O design segue princípios modernos de UI/UX com glassmorphism e animações suaves.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+
+<footer class="app-footer">
+  <p>Copyright &copy; 2026 &mdash; desenvolvido por: <strong>Mel Borges Martins</strong> &mdash; Técnica em Informática, pelo IFSULDEMINAS &mdash; estudante de Sistemas de Informação, UEMG</p>
+</footer>
+</body>
+</html>

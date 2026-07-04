@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <title>Empréstimos – Biblioteca Gestão Inteligente</title>
+  <meta name="description" content="Gerencie os empréstimos de livros da biblioteca."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    /* Searchable select dropdown */
+    .searchable-select-wrapper {
+      position: relative;
+    }
+    .searchable-select-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    .searchable-select-input:focus {
+      border-color: var(--border-active);
+      background: rgba(255,255,255,0.06);
+      outline: none;
+    }
+    .searchable-select-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      z-index: 200;
+      max-height: 220px;
+      overflow-y: auto;
+      display: none;
+      box-shadow: var(--shadow-lg);
+    }
+    .searchable-select-dropdown.open { display: block; }
+    .searchable-select-search {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      background: var(--bg-card);
+    }
+    .searchable-select-search input {
+      width: 100%;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+    }
+    .searchable-select-option {
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .searchable-select-option:hover {
+      background: rgba(209,0,108,0.12);
+      color: var(--text-primary);
+    }
+    .searchable-select-option.selected {
+      background: rgba(209,0,108,0.2);
+      color: var(--color-accent);
+    }
+    .searchable-select-empty {
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menu">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div class="logo-text"><span class="logo-title">Biblioteca</span><span class="logo-subtitle">Gestão Inteligente</span></div>
+    </a>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="nav-label">Início</span></a>
+      <a href="catalogo.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="nav-label">Catálogo de Livros</span></a>
+      <a href="cadastro-livros.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nav-label">Cadastro de Livros</span></a>
+      <a href="cadastro-usuarios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Cadastro de Usuários</span></a>
+      <a href="emprestimos.html" class="nav-item active"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><span class="nav-label">Empréstimos</span></a>
+      <a href="reservas.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label">Reservas</span></a>
+      <a href="perfil.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Perfil do Usuário</span></a>
+      <a href="relatorios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="nav-label">Relatórios</span></a>
+      <a href="sobre.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><span class="nav-label">Sobre o Sistema</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-page-title">Empréstimos</span>
+        <div class="topbar-breadcrumb"><span>Início</span><span>›</span><span>Empréstimos</span></div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" id="btn-novo-emprestimo">➕ Registrar Empréstimo</button>
+        <div class="user-greeting">
+          <span class="greeting-text">Olá, <span class="greeting-name">Recepcionista</span></span>
+          <div class="user-avatar">MR</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="table-container">
+        <div class="table-toolbar">
+          <div class="section-title">
+            <span class="title-icon">🔄</span> Registro de Empréstimos
+            <span class="badge badge-info" style="margin-left:8px" id="total-emprestimos">—</span>
+          </div>
+          <div style="display:flex;gap:var(--space-sm);align-items:center;">
+            <select class="form-control" id="filter-emp-status" style="width:160px;">
+              <option value="">Todos os status</option>
+              <option value="ativo">Ativo</option>
+              <option value="devolvido">Devolvido</option>
+              <option value="atrasado">Atrasado</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Livro</th>
+                <th>Usuário</th>
+                <th>Data Empréstimo</th>
+                <th>Devolução Prevista</th>
+                <th>Devolução Real</th>
+                <th>Status</th>
+                <th>Obs.</th>
+                <th style="text-align:right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="emprestimos-tbody">
+              <tr><td colspan="8"><div class="loading-overlay"><div class="spinner"></div><div class="loading-text">Carregando empréstimos...</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL EMPRESTIMO (Registrar / Editar) -->
+<div class="modal-overlay" id="modal-emprestimo">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-emp-titulo">➕ Registrar Empréstimo</span>
+      <button class="modal-close" id="btn-fechar-modal-emp">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="form-emprestimo" novalidate>
+        <!-- Inputs ocultos para guardar IDs dos selects pesquisáveis -->
+        <input type="hidden" name="livro_id" id="emp-livro-id-hidden"/>
+        <input type="hidden" name="usuario_id" id="emp-usuario-id-hidden"/>
+
+        <div class="form-group">
+          <label class="form-label">Livro *</label>
+          <div class="searchable-select-wrapper">
+            <input type="text" class="searchable-select-input" id="emp-livro-display" placeholder="Selecione ou pesquise um livro..." readonly/>
+            <div class="searchable-select-dropdown" id="emp-livro-dropdown">
+              <div class="searchable-select-search">
+                <input type="text" id="emp-livro-search" placeholder="🔍 Pesquisar livro..."/>
+              </div>
+              <div id="emp-livro-options"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Usuário (Leitor) *</label>
+          <div class="searchable-select-wrapper">
+            <input type="text" class="searchable-select-input" id="emp-usuario-display" placeholder="Selecione ou pesquise um usuário..." readonly/>
+            <div class="searchable-select-dropdown" id="emp-usuario-dropdown">
+              <div class="searchable-select-search">
+                <input type="text" id="emp-usuario-search" placeholder="🔍 Pesquisar usuário..."/>
+              </div>
+              <div id="emp-usuario-options"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Data do Empréstimo *</label>
+            <input type="date" class="form-control" name="data_emprestimo" id="emp-data-emprestimo" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data de Devolução Prevista *</label>
+            <input type="date" class="form-control" name="data_devolucao_prevista" id="emp-data-devolucao" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Observações</label>
+          <textarea class="form-control" name="observacoes" placeholder="Observações adicionais..." rows="3"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="btn-cancelar-emp">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-emp">📋 Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+<script>
+// ===== SEARCHABLE SELECT HELPER =====
+function criarSearchableSelect({ displayId, dropdownId, searchId, optionsId, hiddenId, data, labelFn }) {
+  const displayEl  = document.getElementById(displayId);
+  const dropdownEl = document.getElementById(dropdownId);
+  const searchEl   = document.getElementById(searchId);
+  const optionsEl  = document.getElementById(optionsId);
+  const hiddenEl   = document.getElementById(hiddenId);
+
+  let allOptions = data;
+  let selectedVal = '';
+
+  function renderOptions(list) {
+    if (!list.length) {
+      optionsEl.innerHTML = '<div class="searchable-select-empty">Nenhum resultado encontrado</div>';
+      return;
+    }
+    optionsEl.innerHTML = list.map(item => `
+      <div class="searchable-select-option ${selectedVal == item.id ? 'selected' : ''}" data-id="${item.id}" data-label="${labelFn(item).replace(/"/g,'&quot;')}">
+        ${labelFn(item)}
+      </div>
+    `).join('');
+    optionsEl.querySelectorAll('.searchable-select-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        selectedVal = opt.dataset.id;
+        displayEl.value = opt.dataset.label;
+        hiddenEl.value = opt.dataset.id;
+        dropdownEl.classList.remove('open');
+        renderOptions(allOptions);
+      });
+    });
+  }
+
+  displayEl.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownEl.classList.toggle('open');
+    if (dropdownEl.classList.contains('open')) {
+      searchEl.value = '';
+      renderOptions(allOptions);
+      searchEl.focus();
+    }
+  });
+
+  searchEl.addEventListener('input', () => {
+    const q = searchEl.value.toLowerCase();
+    const filtered = allOptions.filter(item => labelFn(item).toLowerCase().includes(q));
+    renderOptions(filtered);
+  });
+
+  searchEl.addEventListener('click', e => e.stopPropagation());
+
+  document.addEventListener('click', () => dropdownEl.classList.remove('open'));
+
+  return {
+    setData(newData) {
+      allOptions = newData;
+      renderOptions(allOptions);
+    },
+    setValue(id, label) {
+      selectedVal = String(id);
+      displayEl.value = label;
+      hiddenEl.value = id;
+      renderOptions(allOptions);
+    },
+    clear() {
+      selectedVal = '';
+      displayEl.value = '';
+      hiddenEl.value = '';
+    },
+    getValue() { return hiddenEl.value; }
+  };
+}
+</script>
+<script src="js/emprestimos.js"></script>
+
+<footer class="app-footer">
+  <p>Copyright &copy; 2026 &mdash; desenvolvido por: <strong>Mel Borges Martins</strong> &mdash; Técnica em Informática, pelo IFSULDEMINAS &mdash; estudante de Sistemas de Informação, UEMG</p>
+</footer>
+</body>
+</html>

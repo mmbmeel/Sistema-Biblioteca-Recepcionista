@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <title>Reservas – Biblioteca Gestão Inteligente</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menu">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div class="logo-text"><span class="logo-title">Biblioteca</span><span class="logo-subtitle">Gestão Inteligente</span></div>
+    </a>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="nav-label">Início</span></a>
+      <a href="catalogo.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="nav-label">Catálogo de Livros</span></a>
+      <a href="cadastro-livros.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nav-label">Cadastro de Livros</span></a>
+      <a href="cadastro-usuarios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Cadastro de Usuários</span></a>
+      <a href="emprestimos.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><span class="nav-label">Empréstimos</span></a>
+      <a href="reservas.html" class="nav-item active"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label">Reservas</span></a>
+      <a href="perfil.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Perfil do Usuário</span></a>
+      <a href="relatorios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="nav-label">Relatórios</span></a>
+      <a href="sobre.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><span class="nav-label">Sobre o Sistema</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-page-title">Reservas</span>
+        <div class="topbar-breadcrumb"><span>Início</span><span>›</span><span>Reservas</span></div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" id="btn-nova-reserva">➕ Nova Reserva</button>
+        <div class="user-greeting">
+          <span class="greeting-text">Olá, <span class="greeting-name">Recepcionista</span></span>
+          <div class="user-avatar">MR</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="table-container">
+        <div class="table-toolbar">
+          <div class="section-title"><span class="title-icon">🔖</span> Reservas de Livros <span class="badge badge-info" style="margin-left:8px" id="total-reservas">—</span></div>
+          <select class="form-control" id="filter-res-status" style="width:160px;">
+            <option value="">Todos os status</option>
+            <option value="ativa">Ativa</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="concluida">Concluída</option>
+          </select>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Livro</th>
+                <th>Usuário</th>
+                <th>Data Reserva</th>
+                <th>Expiração</th>
+                <th>Status</th>
+                <th style="text-align:right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="reservas-tbody">
+              <tr><td colspan="6"><div class="loading-overlay"><div class="spinner"></div><div class="loading-text">Carregando reservas...</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL RESERVA -->
+<div class="modal-overlay" id="modal-reserva">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">🔖 Nova Reserva</span>
+      <button class="modal-close" id="btn-fechar-modal-res">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="form-reserva" novalidate>
+        <div class="form-group">
+          <label class="form-label">Livro *</label>
+          <select class="form-control" name="livro_id" id="res-livro-id" required>
+            <option value="">Selecione um livro...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Usuário *</label>
+          <select class="form-control" name="usuario_id" id="res-usuario-id" required>
+            <option value="">Selecione um usuário...</option>
+          </select>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Data da Reserva *</label>
+            <input type="date" class="form-control" name="data_reserva" id="res-data-reserva" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data de Expiração *</label>
+            <input type="date" class="form-control" name="data_expiracao" id="res-data-expiracao" required/>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="btn-cancelar-res">Cancelar</button>
+          <button type="submit" class="btn btn-primary">🔖 Reservar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let reservas = [];
+  const tbodyEl   = document.getElementById('reservas-tbody');
+  const modalEl   = document.getElementById('modal-reserva');
+  const formEl    = document.getElementById('form-reserva');
+  const totalEl   = document.getElementById('total-reservas');
+  const filterEl  = document.getElementById('filter-res-status');
+
+  async function load(filters = {}) {
+    showLoading();
+    try {
+      const res = await reservasAPI.getAll(filters);
+      reservas = res.data || [];
+      if(totalEl) totalEl.textContent = reservas.length;
+      render();
+    } catch(e) { Toast.error('Erro', e.message); }
+  }
+
+  function render() {
+    if(!tbodyEl) return;
+    if(!reservas.length) {
+      tbodyEl.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">🔖</div><div class="empty-title">Nenhuma reserva</div></div></td></tr>`;
+      return;
+    }
+    tbodyEl.innerHTML = reservas.map(r => `
+      <tr>
+        <td class="td-title">${esc(r.livro_titulo || '—')}</td>
+        <td>${esc(r.usuario_nome || '—')}</td>
+        <td>${fmtDate(r.data_reserva)}</td>
+        <td>${fmtDate(r.data_expiracao)}</td>
+        <td>${statusBadge(r.status)}</td>
+        <td>
+          <div class="td-actions">
+            ${r.status === 'ativa' ? `
+              <button class="btn btn-success btn-sm" onclick="concluirReserva(${r.id}, '${esc(r.livro_titulo)}')">✓ Concluir → Empréstimo</button>
+              <button class="btn btn-ghost btn-sm" onclick="cancelarReserva(${r.id})">✗ Cancelar</button>
+            ` : ''}
+            <button class="btn btn-danger btn-sm btn-icon" onclick="excluirReserva(${r.id})">🗑</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Abrir modal
+  document.getElementById('btn-nova-reserva').addEventListener('click', async () => {
+    formEl.reset();
+    try {
+      const [lr, ur] = await Promise.all([livrosAPI.getAll(), usuariosAPI.getAll()]);
+      document.getElementById('res-livro-id').innerHTML = '<option value="">Selecione...</option>' +
+        (lr.data||[]).map(l=>`<option value="${l.id}">${esc(l.titulo)}</option>`).join('');
+      document.getElementById('res-usuario-id').innerHTML = '<option value="">Selecione...</option>' +
+        (ur.data||[]).filter(u=>u.status==='ativo').map(u=>`<option value="${u.id}">${esc(u.nome)}</option>`).join('');
+      const today = new Date().toISOString().split('T')[0];
+      const exp = new Date(); exp.setDate(exp.getDate()+7);
+      document.getElementById('res-data-reserva').value = today;
+      document.getElementById('res-data-expiracao').value = exp.toISOString().split('T')[0];
+    } catch(e){}
+    modalEl.classList.add('open');
+  });
+
+  function closeModal(){ modalEl.classList.remove('open'); formEl.reset(); }
+  document.getElementById('btn-fechar-modal-res').addEventListener('click', closeModal);
+  document.getElementById('btn-cancelar-res').addEventListener('click', closeModal);
+  modalEl.addEventListener('click', e=>{ if(e.target===modalEl) closeModal(); });
+
+  formEl.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = formEl.querySelector('[type=submit]');
+    if(btn){ btn.disabled=true; btn.textContent='Salvando...'; }
+    const data = Object.fromEntries(new FormData(formEl));
+    data.livro_id=parseInt(data.livro_id); data.usuario_id=parseInt(data.usuario_id);
+    try {
+      await reservasAPI.create(data);
+      Toast.success('Reserva criada!');
+      closeModal(); load();
+    } catch(e){ Toast.error('Erro', e.message); }
+    finally { if(btn){btn.disabled=false;btn.textContent='🔖 Reservar';} }
+  });
+
+  // Concluir reserva → gera empréstimo automaticamente
+  window.concluirReserva = async (id, tituloLivro) => {
+    Modal.confirm(
+      'Concluir Reserva',
+      `O livro <strong>"${tituloLivro || ''}"</strong> foi retirado pelo leitor?<br><br>
+       <span style="color:var(--color-accent);font-size:13px;">✓ A reserva será concluída e um <strong>empréstimo será criado automaticamente</strong>.</span>`,
+      async () => {
+        try {
+          await reservasAPI.concluirParaEmprestimo(id);
+          Toast.success('Reserva concluída!', 'O empréstimo foi registrado automaticamente.');
+          load();
+        } catch(e){ Toast.error('Erro', e.message); }
+      },
+      'primary'
+    );
+  };
+
+  window.cancelarReserva = async id => {
+    Modal.confirm('Cancelar Reserva','Confirma o cancelamento desta reserva?', async ()=>{
+      try{ await reservasAPI.updateStatus(id,'cancelada'); Toast.success('Reserva cancelada'); load(); }
+      catch(e){ Toast.error('Erro',e.message); }
+    },'danger');
+  };
+  window.excluirReserva = id => {
+    Modal.confirm('Excluir Reserva','Excluir este registro?', async ()=>{
+      try{ await reservasAPI.delete(id); Toast.success('Excluída!'); load(); }
+      catch(e){ Toast.error('Erro',e.message); }
+    });
+  };
+
+  filterEl.addEventListener('change', ()=>{ load(filterEl.value?{status:filterEl.value}:{}); });
+
+  function statusBadge(s){ const m={ativa:'primary',cancelada:'danger',concluida:'success'}; const t={ativa:'Ativa',cancelada:'Cancelada',concluida:'Concluída'}; return `<span class="badge badge-${m[s]||'info'}">${t[s]||s}</span>`; }
+  function fmtDate(d){ if(!d) return '—'; return new Date(d+'T00:00:00').toLocaleDateString('pt-BR'); }
+  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function showLoading(){ if(!tbodyEl) return; tbodyEl.innerHTML=`<tr><td colspan="6"><div class="loading-overlay"><div class="spinner"></div><div class="loading-text">Carregando...</div></div></td></tr>`; }
+
+  load();
+});
+</script>
+
+<footer class="app-footer">
+  <p>Copyright &copy; 2026 &mdash; desenvolvido por: <strong>Mel Borges Martins</strong> &mdash; Técnica em Informática, pelo IFSULDEMINAS &mdash; estudante de Sistemas de Informação, UEMG</p>
+</footer>
+</body>
+</html>

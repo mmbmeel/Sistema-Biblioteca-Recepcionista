@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <title>Cadastro de Livros – Biblioteca Gestão Inteligente</title>
+  <meta name="description" content="Gerencie o acervo de livros: cadastre, edite e exclua livros do sistema."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <style>
+    /* ===== GENRE CHECKBOX GRID ===== */
+    .genre-checkbox-group {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--glass-bg);
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      max-height: 210px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-primary) transparent;
+    }
+    .genre-checkbox-group::-webkit-scrollbar { width: 4px; }
+    .genre-checkbox-group::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 4px; }
+
+    .genre-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 5px 8px;
+      border-radius: 20px;
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+    .genre-checkbox-item:hover {
+      background: rgba(209,0,108,0.07);
+      border-color: rgba(209,0,108,0.25);
+    }
+    .genre-checkbox-item input[type="checkbox"] {
+      display: none;
+    }
+    .genre-checkbox-box {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border-color);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .genre-checkbox-box svg { display: none; }
+    .genre-checkbox-item input[type="checkbox"]:checked ~ .genre-checkbox-box {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+    .genre-checkbox-item input[type="checkbox"]:checked ~ .genre-checkbox-box svg { display: block; }
+    .genre-checkbox-item:has(input:checked) {
+      background: rgba(209,0,108,0.12);
+      border-color: rgba(209,0,108,0.4);
+    }
+    .genre-checkbox-label {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.2;
+    }
+    .genre-checkbox-item:has(input:checked) .genre-checkbox-label {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .genre-selected-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 7px;
+      min-height: 0;
+    }
+    .genre-tag {
+      background: rgba(209,0,108,0.15);
+      border: 1px solid rgba(209,0,108,0.35);
+      color: var(--color-primary);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .genre-tag-empty {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ===== COVER UPLOAD ===== */
+    .cover-upload-area {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-normal);
+      background: var(--glass-bg);
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      position: relative;
+    }
+    .cover-upload-area:hover, .cover-upload-area.dragover {
+      border-color: var(--color-primary);
+      background: rgba(209,0,108,0.05);
+    }
+    .cover-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .cover-preview-img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+    .cover-upload-icon { font-size: 32px; }
+    .cover-upload-text { font-size: 12px; color: var(--text-muted); }
+    .cover-upload-hint { font-size: 11px; color: var(--text-muted); opacity: 0.7; }
+    .cover-remove-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(232,64,64,0.85);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 14px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menu">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div class="logo-text"><span class="logo-title">Biblioteca</span><span class="logo-subtitle">Gestão Inteligente</span></div>
+    </a>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="nav-label">Início</span></a>
+      <a href="catalogo.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="nav-label">Catálogo de Livros</span></a>
+      <a href="cadastro-livros.html" class="nav-item active"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nav-label">Cadastro de Livros</span></a>
+      <a href="cadastro-usuarios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Cadastro de Usuários</span></a>
+      <a href="emprestimos.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><span class="nav-label">Empréstimos</span></a>
+      <a href="reservas.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label">Reservas</span></a>
+      <a href="perfil.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Perfil do Usuário</span></a>
+      <a href="relatorios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="nav-label">Relatórios</span></a>
+      <a href="sobre.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><span class="nav-label">Sobre o Sistema</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-page-title">Cadastro de Livros</span>
+        <div class="topbar-breadcrumb"><span>Início</span><span>›</span><span>Livros</span></div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" id="btn-novo-livro">➕ Novo Livro</button>
+        <div class="user-greeting">
+          <span class="greeting-text">Olá, <span class="greeting-name">Recepcionista</span></span>
+          <div class="user-avatar">MR</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <!-- Barra de ferramentas da tabela -->
+      <div class="table-container">
+        <div class="table-toolbar">
+          <div class="section-title">
+            <span class="title-icon">📚</span> Acervo de Livros
+            <span class="badge badge-info" style="margin-left:8px" id="total-livros">—</span>
+          </div>
+          <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap;align-items:center;">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" class="form-control" id="search-livros" placeholder="Buscar livro ou autor..." style="width:240px;"/>
+            </div>
+            <select class="form-control" id="filter-status" style="width:150px;">
+              <option value="">Todos os status</option>
+              <option value="disponivel">Disponível</option>
+              <option value="indisponivel">Indisponível</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Capa</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Categoria</th>
+                <th>Editora</th>
+                <th>Ano</th>
+                <th>Qtd.</th>
+                <th>Status</th>
+                <th style="text-align:right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="livros-tbody">
+              <tr><td colspan="9"><div class="loading-overlay"><div class="spinner"></div><div class="loading-text">Carregando...</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination-livros"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ===== MODAL CADASTRO/EDIÇÃO DE LIVRO ===== -->
+<div class="modal-overlay" id="modal-livro">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-titulo">➕ Cadastrar Livro</span>
+      <button class="modal-close" id="btn-fechar-modal">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="form-livro" novalidate>
+        <div class="form-grid">
+          <div class="form-group form-full">
+            <label class="form-label">Título *</label>
+            <input type="text" class="form-control" name="titulo" placeholder="Ex: Dom Casmurro" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Autor *</label>
+            <input type="text" class="form-control" name="autor" placeholder="Ex: Machado de Assis" required/>
+          </div>
+          <!-- Categoria / Gênero: múltipla seleção via checkboxes -->
+          <div class="form-group form-full">
+            <label class="form-label">Categoria / Gênero</label>
+            <!-- Campo oculto que armazena os valores selecionados -->
+            <input type="hidden" name="categoria" id="categoria-hidden"/>
+            <div class="genre-checkbox-group" id="genre-checkbox-group">
+              <!-- Checkboxes gerados dinamicamente pelo script abaixo -->
+            </div>
+            <div class="genre-selected-tags" id="genre-selected-tags">
+              <span class="genre-tag-empty">Nenhum gênero selecionado</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Editora</label>
+            <select class="form-control" name="editora">
+              <option value="">Selecione a editora...</option>
+              <option value="Companhia das Letras">Companhia das Letras</option>
+              <option value="Record">Universo das Letras</option>
+              <option value="Record">Record</option>
+              <option value="Intrínseca">Intrínseca</option>
+              <option value="Rocco">Rocco</option>
+              <option value="Arqueiro">Arqueiro</option>
+              <option value="Sextante">Sextante</option>
+              <option value="Saraiva">Saraiva</option>
+              <option value="Ática">Ática</option>
+              <option value="Moderna">Moderna</option>
+              <option value="FTD">FTD</option>
+              <option value="Scipione">Scipione</option>
+              <option value="JBC">JBC</option>
+              <option value="Panini">Panini</option>
+              <option value="DarkSide Books">DarkSide Books</option>
+              <option value="L&PM">L&PM</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ano de Publicação</label>
+            <input type="number" class="form-control" name="ano_publicacao" placeholder="Ex: 1899" min="1000" max="2099"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ISBN</label>
+            <input type="text" class="form-control" name="isbn" id="input-isbn" placeholder="Ex: ###-##-##-#####-#" maxlength="17" autocomplete="off"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quantidade Disponível</label>
+            <input type="number" class="form-control" name="quantidade_disponivel" placeholder="1" min="0" value="1"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Idioma</label>
+            <select class="form-control" name="idioma">
+              <option value="Português">Português</option>
+              <option value="Inglês">Inglês</option>
+              <option value="Espanhol">Espanhol</option>
+              <option value="Francês">Francês</option>
+              <option value="Alemão">Alemão</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-control" name="status">
+              <option value="disponivel">Disponível</option>
+              <option value="indisponivel">Indisponível</option>
+            </select>
+          </div>
+
+          <!-- Campo de imagem de capa -->
+          <div class="form-group form-full">
+            <label class="form-label">Imagem da Capa</label>
+            <div class="cover-upload-area" id="cover-upload-area">
+              <input type="file" id="cover-file-input" accept="image/*"/>
+              <button type="button" class="cover-remove-btn" id="cover-remove-btn" title="Remover capa">×</button>
+              <img id="cover-preview-img" class="cover-preview-img" src="" alt="Preview da capa"/>
+              <div id="cover-upload-placeholder">
+                <div class="cover-upload-icon">🖼️</div>
+                <div class="cover-upload-text">Clique ou arraste uma imagem de capa</div>
+                <div class="cover-upload-hint">JPG, PNG, WEBP · Máx. 5 MB</div>
+              </div>
+            </div>
+            <!-- Campo oculto para guardar a URL/base64 -->
+            <input type="hidden" name="capa_url" id="capa-url-input"/>
+          </div>
+
+          <div class="form-group form-full">
+            <label class="form-label">Sinopse</label>
+            <textarea class="form-control" name="sinopse" placeholder="Descrição do livro..." rows="4"></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="btn-cancelar">Cancelar</button>
+          <button type="submit" class="btn btn-primary">💾 Salvar Livro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+<script>
+// ===== COVER UPLOAD LOGIC =====
+(function() {
+  const area     = document.getElementById('cover-upload-area');
+  const fileInput= document.getElementById('cover-file-input');
+  const preview  = document.getElementById('cover-preview-img');
+  const placeholder = document.getElementById('cover-upload-placeholder');
+  const removeBtn= document.getElementById('cover-remove-btn');
+  const hiddenUrl= document.getElementById('capa-url-input');
+
+  function showPreview(src) {
+    preview.src = src;
+    preview.style.display = 'block';
+    placeholder.style.display = 'none';
+    removeBtn.style.display = 'flex';
+    hiddenUrl.value = src;
+  }
+
+  function clearPreview() {
+    preview.src = '';
+    preview.style.display = 'none';
+    placeholder.style.display = 'flex';
+    removeBtn.style.display = 'none';
+    hiddenUrl.value = '';
+    fileInput.value = '';
+  }
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { alert('Imagem muito grande! Máx. 5 MB.'); return; }
+    const reader = new FileReader();
+    reader.onload = e => showPreview(e.target.result);
+    reader.readAsDataURL(file);
+  });
+
+  removeBtn.addEventListener('click', e => { e.stopPropagation(); clearPreview(); });
+
+  area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
+  area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+  area.addEventListener('drop', e => {
+    e.preventDefault();
+    area.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      if (file.size > 5 * 1024 * 1024) { alert('Imagem muito grande! Máx. 5 MB.'); return; }
+      const reader = new FileReader();
+      reader.onload = ev => showPreview(ev.target.result);
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Expor para uso externo
+  window._coverPreview = { showPreview, clearPreview };
+})();
+</script>
+<script>
+// ===== MÁSCARA ISBN (978-XX-XXX-XXXX-X) =====
+(function() {
+  const isbnInput = document.getElementById('input-isbn');
+  if (!isbnInput) return;
+
+  function applyIsbnMask(value) {
+    // Remove tudo que não for dígito
+    const digits = value.replace(/\D/g, '').slice(0, 13);
+    // Aplica a máscara: 3-2-3-4-1
+    let masked = '';
+    if (digits.length <= 3) {
+      masked = digits;
+    } else if (digits.length <= 5) {
+      masked = digits.slice(0,3) + '-' + digits.slice(3);
+    } else if (digits.length <= 8) {
+      masked = digits.slice(0,3) + '-' + digits.slice(3,5) + '-' + digits.slice(5);
+    } else if (digits.length <= 12) {
+      masked = digits.slice(0,3) + '-' + digits.slice(3,5) + '-' + digits.slice(5,8) + '-' + digits.slice(8);
+    } else {
+      masked = digits.slice(0,3) + '-' + digits.slice(3,5) + '-' + digits.slice(5,8) + '-' + digits.slice(8,12) + '-' + digits.slice(12);
+    }
+    return masked;
+  }
+
+  isbnInput.addEventListener('input', function() {
+    const cursorPos = this.selectionStart;
+    const oldLen = this.value.length;
+    this.value = applyIsbnMask(this.value);
+    const newLen = this.value.length;
+    // Ajustar cursor
+    const diff = newLen - oldLen;
+    this.setSelectionRange(cursorPos + diff, cursorPos + diff);
+  });
+
+  isbnInput.addEventListener('keydown', function(e) {
+    // Permitir backspace mesmo com máscara
+    if (e.key === 'Backspace' && this.value.endsWith('-')) {
+      this.value = this.value.slice(0, -1);
+      e.preventDefault();
+    }
+  });
+
+  // Expor para uso externo (preenchimento ao editar)
+  window._isbnMask = { apply: applyIsbnMask, input: isbnInput };
+})();
+</script>
+<script>
+// ===== GENRE CHECKBOXES =====
+(function() {
+  const GENRES = [
+    'Romance','Ficção Científica','Fantasia', 'Distopia', 'Terror','Mistério','Suspense',
+    'Aventura','Drama','Comédia','Poesia','Biografia','História',
+    'Filosofia','Religião','Autoajuda','Educação','Ciência','Tecnologia',
+    'Quadrinhos','Mangá','Infantil','Infantojuvenil'
+  ];
+
+  const groupEl  = document.getElementById('genre-checkbox-group');
+  const hiddenEl = document.getElementById('categoria-hidden');
+  const tagsEl   = document.getElementById('genre-selected-tags');
+
+  if (!groupEl) return;
+
+  // Renderizar checkboxes
+  groupEl.innerHTML = GENRES.map((g, i) => `
+    <label class="genre-checkbox-item" for="genre-cb-${i}">
+      <input type="checkbox" id="genre-cb-${i}" value="${g}"/>
+      <span class="genre-checkbox-box">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2">
+          <polyline points="1.5,5 4,7.5 8.5,2"/>
+        </svg>
+      </span>
+      <span class="genre-checkbox-label">${g}</span>
+    </label>
+  `).join('');
+
+  // Atualizar hidden input e tags ao mudar seleção
+  function updateState() {
+    const checked = [...groupEl.querySelectorAll('input[type="checkbox"]:checked')].map(cb => cb.value);
+    hiddenEl.value = checked.join(', ');
+    if (checked.length === 0) {
+      tagsEl.innerHTML = '<span class="genre-tag-empty">Nenhum gênero selecionado</span>';
+    } else {
+      tagsEl.innerHTML = checked.map(g => `<span class="genre-tag">${g}</span>`).join('');
+    }
+  }
+
+  groupEl.addEventListener('change', updateState);
+
+  // Expor funções para uso externo (livros.js ao editar)
+  window._genreCheckbox = {
+    // Marca os gêneros que estavam salvos (string separada por vírgula)
+    setValue(val) {
+      const genres = (val || '').split(',').map(s => s.trim()).filter(Boolean);
+      groupEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.checked = genres.includes(cb.value);
+      });
+      updateState();
+    },
+    // Limpa todas as seleções
+    clear() {
+      groupEl.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      updateState();
+    },
+    // Retorna a string dos gêneros selecionados
+    getValue() { return hiddenEl.value; }
+  };
+})();
+</script>
+<script src="js/livros.js"></script>
+
+<footer class="app-footer">
+  <p>Copyright &copy; 2026 &mdash; desenvolvido por: <strong>Mel Borges Martins</strong> &mdash; Técnica em Informática, pelo IFSULDEMINAS &mdash; estudante de Sistemas de Informação, UEMG</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <title>Cadastro de Usuários – Biblioteca Gestão Inteligente</title>
+  <meta name="description" content="Gerencie os usuários do sistema de biblioteca."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+</head>
+<body>
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Abrir menu">
+  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+</button>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <div class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      <div class="logo-text"><span class="logo-title">Biblioteca</span><span class="logo-subtitle">Gestão Inteligente</span></div>
+    </a>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span><span class="nav-label">Início</span></a>
+      <a href="catalogo.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="nav-label">Catálogo de Livros</span></a>
+      <a href="cadastro-livros.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="nav-label">Cadastro de Livros</span></a>
+      <a href="cadastro-usuarios.html" class="nav-item active"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Cadastro de Usuários</span></a>
+      <a href="emprestimos.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span><span class="nav-label">Empréstimos</span></a>
+      <a href="reservas.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="nav-label">Reservas</span></a>
+      <a href="perfil.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-label">Perfil do Usuário</span></a>
+      <a href="relatorios.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="nav-label">Relatórios</span></a>
+      <a href="sobre.html" class="nav-item"><span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span><span class="nav-label">Sobre o Sistema</span></a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-page-title">Cadastro de Usuários</span>
+        <div class="topbar-breadcrumb"><span>Início</span><span>›</span><span>Usuários</span></div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" id="btn-novo-usuario">➕ Novo Usuário</button>
+        <div class="user-greeting">
+          <span class="greeting-text">Olá, <span class="greeting-name">Recepcionista</span></span>
+          <div class="user-avatar">MR</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="table-container">
+        <div class="table-toolbar">
+          <div class="section-title">
+            <span class="title-icon">👤</span> Usuários Cadastrados
+            <span class="badge badge-info" style="margin-left:8px" id="total-usuarios">—</span>
+          </div>
+          <div style="display:flex;gap:var(--space-sm);align-items:center;flex-wrap:wrap;">
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" class="form-control" id="search-usuarios" placeholder="Buscar usuário..." style="width:220px;"/>
+            </div>
+            <select class="form-control" id="filter-tipo" style="width:150px;">
+              <option value="">Todos os tipos</option>
+              <option value="admin">Admin</option>
+              <option value="recepcionista">Recepcionista</option>
+              <option value="leitor">Leitor</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Tipo</th>
+                <th>Telefone</th>
+                <th>CPF</th>
+                <th>Status</th>
+                <th style="text-align:right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="usuarios-tbody">
+              <tr><td colspan="7"><div class="loading-overlay"><div class="spinner"></div><div class="loading-text">Carregando usuários...</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL USUARIO -->
+<div class="modal-overlay" id="modal-usuario">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-usuario-titulo">➕ Cadastrar Usuário</span>
+      <button class="modal-close" id="btn-fechar-modal-usuario">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="form-usuario" novalidate>
+        <div class="form-group">
+          <label class="form-label">Nome Completo *</label>
+          <input type="text" class="form-control" name="nome" placeholder="Ex: João da Silva" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail *</label>
+          <input type="email" class="form-control" name="email" placeholder="joao@email.com" required/>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Tipo de Usuário</label>
+            <select class="form-control" name="tipo">
+              <option value="leitor">Leitor</option>
+              <option value="recepcionista">Recepcionista</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-control" name="status">
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefone</label>
+            <input type="tel" class="form-control" name="telefone" id="campo-telefone" placeholder="(##) # ####-####" maxlength="16"/>
+            <span class="form-hint" id="hint-telefone" style="font-size:11px;color:var(--text-muted);margin-top:4px;display:block"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">CPF</label>
+            <input type="text" class="form-control" name="cpf" id="campo-cpf" placeholder="###.###.###-##" maxlength="14"/>
+            <span class="form-hint" id="hint-cpf" style="font-size:11px;color:var(--color-danger);margin-top:4px;display:block"></span>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="btn-cancelar-usuario">Cancelar</button>
+          <button type="submit" class="btn btn-primary">💾 Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/sidebar.js"></script>
+<script>
+// ===== MÁSCARAS DE CPF E TELEFONE =====
+(function() {
+  const telEl  = document.getElementById('campo-telefone');
+  const cpfEl  = document.getElementById('campo-cpf');
+  const hintTel= document.getElementById('hint-telefone');
+  const hintCpf= document.getElementById('hint-cpf');
+
+  // Máscara telefone: (##) # ####-####  →  16 chars
+  telEl.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length === 0) { this.value = ''; return; }
+    let fmt = '';
+    if (v.length <= 2) fmt = `(${v}`;
+    else if (v.length <= 3) fmt = `(${v.slice(0,2)}) ${v.slice(2)}`;
+    else if (v.length <= 7) fmt = `(${v.slice(0,2)}) ${v.slice(2,3)} ${v.slice(3)}`;
+    else fmt = `(${v.slice(0,2)}) ${v.slice(2,3)} ${v.slice(3,7)}-${v.slice(7)}`;
+    this.value = fmt;
+    hintTel.textContent = v.length === 11 ? '' : `Digite ${11 - v.length} dígito(s) faltando`;
+    hintTel.style.color = v.length === 11 ? 'var(--color-success)' : 'var(--text-muted)';
+  });
+
+  // Máscara CPF: ###.###.###-##  →  14 chars
+  cpfEl.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length === 0) { this.value = ''; hintCpf.textContent=''; return; }
+    let fmt = v;
+    if (v.length > 3)  fmt = v.slice(0,3) + '.' + v.slice(3);
+    if (v.length > 6)  fmt = v.slice(0,3) + '.' + v.slice(3,6) + '.' + v.slice(6);
+    if (v.length > 9)  fmt = v.slice(0,3) + '.' + v.slice(3,6) + '.' + v.slice(6,9) + '-' + v.slice(9);
+    this.value = fmt;
+
+    if (v.length < 11) {
+      hintCpf.textContent = `Faltam ${11 - v.length} dígito(s)`;
+      hintCpf.style.color = 'var(--text-muted)';
+    } else {
+      if (validarCPF(v)) {
+        hintCpf.textContent = '✓ CPF válido';
+        hintCpf.style.color = 'var(--color-success)';
+      } else {
+        hintCpf.textContent = '✗ CPF inválido';
+        hintCpf.style.color = 'var(--color-danger)';
+      }
+    }
+  });
+
+  function validarCPF(cpf) {
+    if (/^(\d)\1+$/.test(cpf)) return false; // sequências repetidas
+    let s = 0;
+    for (let i = 0; i < 9; i++) s += parseInt(cpf[i]) * (10 - i);
+    let r = (s * 10) % 11;
+    if (r === 10 || r === 11) r = 0;
+    if (r !== parseInt(cpf[9])) return false;
+    s = 0;
+    for (let i = 0; i < 10; i++) s += parseInt(cpf[i]) * (11 - i);
+    r = (s * 10) % 11;
+    if (r === 10 || r === 11) r = 0;
+    return r === parseInt(cpf[10]);
+  }
+
+  // Exportar validador para uso no submit
+  window._validarCPF = validarCPF;
+})();
+</script>
+<script src="js/usuarios.js"></script>
+
+<footer class="app-footer">
+  <p>Copyright &copy; 2026 &mdash; desenvolvido por: <strong>Mel Borges Martins</strong> &mdash; Técnica em Informática, pelo IFSULDEMINAS &mdash; estudante de Sistemas de Informação, UEMG</p>
+</footer>
+</body>
+</html>
